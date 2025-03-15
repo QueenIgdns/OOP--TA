@@ -1,17 +1,17 @@
 package MotorPH_OOP;
 import java.util.List;
 import java.util.Scanner;
-import MotorPH_OOP.Employee;
+
 
 public class Main {
     public static void main(String[] args) {
-        Employee empwithmethod =
+        
         
         // Read employees data from CSV
         CSVReader csvReader = new CSVReader();
         String csvFile = "src/MotorPH_OOP/employees.csv";  // Path to CSV file
 
-        List<CSVReader.Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
+        List<Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
         
         // Check if there are employees loaded
         if (employees.isEmpty()) {
@@ -28,7 +28,7 @@ public class Main {
 
         // Check if entered credentials match any employee
         boolean loginSuccessful = false;
-        for (CSVReader.Employee employee : employees) {
+        for (Employee employee : employees) {
             if (employee.username.equals(inputUsername) && employee.password.equals(inputPassword)) {
                 System.out.println("Login successful! Welcome, " + employee.firstName + " " + employee.lastName);
                 
@@ -44,7 +44,7 @@ public class Main {
                 
                 // Calculate salary (you can adjust deduction as needed)
                 double deductions = 5000;  // Example deductions
-                double salary = employee.calculateSalary(hoursWorked, overtimeHours, deductions);  // Pass overtimeHours
+                double salary = employee.calculateSalaryWithOvertime(hoursWorked, overtimeHours, deductions);  // Pass overtimeHours
                 
                 // Display the salary and overtime pay
                 System.out.println("Total Salary: " + salary);

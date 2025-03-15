@@ -26,7 +26,7 @@ public class Employee extends Person {
     private double phoneAllowance;
     private double clothingAllowance;
     private double grossSemiMonthly;
-    private double hourlyRate;
+    double hourlyRate;
     private int daysWorked;
     private int lateDays;
     private int absentDays;
@@ -48,8 +48,8 @@ public class Employee extends Person {
                                     String birthday, String address, String phoneNumber, String sssNumber, String philhealthNumber,
                                     String tinNumber, String pagibigNumber, String status, String position, String immediateSupervisor,
                                     double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance,
-                                    double grossSemiMonthlyRate, double hourlyRate) {
-                        this.employeeId = employeeId;
+                                    double grossSemiMonthly, double hourlyRate) {
+                        this.employeeID = employeeID;
                         this.lastName = lastName;
                         this.firstName = firstName;
                         this.username = username;
@@ -68,7 +68,7 @@ public class Employee extends Person {
                         this.riceSubsidy = riceSubsidy;
                         this.phoneAllowance = phoneAllowance;
                         this.clothingAllowance = clothingAllowance;
-                        this.grossSemiMonthlyRate = grossSemiMonthlyRate;
+                        this.grossSemiMonthly = grossSemiMonthly;
                         this.hourlyRate = hourlyRate;
                     }
 

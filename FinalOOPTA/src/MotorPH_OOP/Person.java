@@ -9,8 +9,8 @@ package MotorPH_OOP;
  * @author jrssc
  */
 public abstract class Person {
-    private String firstName;
-    private String lastName;
+    String firstName;
+    String lastName;
     private String address;
     private String birthday;
     
