@@ -6,7 +6,7 @@ package MotorPH_OOP;
 
 public class Employee extends Person {
     private String employeeID;
-    private String position;
+    String position;
 
     String username;
     String password;
@@ -31,6 +31,8 @@ public class Employee extends Person {
     private int lateDays;
     private int absentDays;
     private double salary;
+    
+    
 
     public Employee() {
         super(); 
@@ -44,11 +46,10 @@ public class Employee extends Person {
         this.hourlyRate = hourlyRate;
     }
     
-    public Employee(String employeeId, String lastName, String firstName, String username, String password,
-                                    String birthday, String address, String phoneNumber, String sssNumber, String philhealthNumber,
-                                    String tinNumber, String pagibigNumber, String status, String position, String immediateSupervisor,
-                                    double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance,
-                                    double grossSemiMonthly, double hourlyRate) {
+    public Employee(String employeeID,String lastName,String firstName,String username,String password,String birthday,String address,String phoneNumber,String sssNumber,
+            String philhealthNumber,String tinNumber, String pagibigNumber, String status, String position, String immediateSupervisor,
+            double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance,
+            double grossSemiMonthly, double hourlyRate) {
                         this.employeeID = employeeID;
                         this.lastName = lastName;
                         this.firstName = firstName;
@@ -85,6 +86,15 @@ public class Employee extends Person {
     public void setDaysWorked(int daysWorked) { this.daysWorked = daysWorked; }
     public void setLateDays(int lateDays) { this.lateDays = lateDays; }
     public void setAbsentDays(int absentDays) { this.absentDays = absentDays; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setSSSNumber(String sssNumber) {this.sssNumber = sssNumber;}
+    public void setphilhealthNumber(String philhealthNumber) {this.philhealthNumber = philhealthNumber;}
+    public void settinNumber(String tinNumber) {this.tinNumber = tinNumber;}
+    public void setpagibigNumber(String pagibigNumber) {this.pagibigNumber = pagibigNumber;}
+    public void setBirthday(String birthday) {this.birthday = birthday;}
+    public void setAddressFromEmp(String address) {this.address = address;}
+    public void setStatus(String status) {this.status = status;}
+    
 
     // ===== Getters =====
     public String getEmployeeID() { return employeeID; }
@@ -99,9 +109,15 @@ public class Employee extends Person {
     public int getDaysWorked() { return daysWorked; }
     public int getLateDays() { return lateDays; }
     public int getAbsentDays() { return absentDays; } 
-    public double getSalary() {
-        return salary;
-    }
+    public double getSalary() {return salary;}
+    public String getPhoneNumber() {return phoneNumber;}
+    public String getSSSNumber() {return sssNumber;}
+    public String getphilhealthNumber() {return philhealthNumber;}
+    public String gettinNumber() {return tinNumber;}
+    public String getpagibigNumber() {return pagibigNumber;}
+    public String getBithday() {return birthday;}
+    public String getAddressFromEmp() {return address;}
+    public String getStatus() {return status;}
 
     // ===== Government Contributions =====
 
@@ -230,6 +246,40 @@ public class Employee extends Person {
         System.out.println("Absent Days: " + absentDays);
         System.out.println("Late Deduction: " + calculateLateDeduction());
         System.out.println("Absent Deduction: " + calculateAbsentDeduction());
+    }
+    
+    public void displayPayrollCalculationDetails(double overtimeHr, double netPay) {
+        System.out.println("======Payroll Summary======");
+        System.out.println("Employee Name: " + getFirstName() + " " + getLastName());
+        System.out.println("Position: " + position);
+        System.out.println("Payroll Period: " + "[Start Date] " + "[End Date]");
+        System.out.println("----------------------------");
+        System.out.println("Basic Salary: ₱" + basicSalary);
+        System.out.println("Gross Semi-Monthly: ₱" + getGrossSemiMonthly());
+        System.out.println("Allowances:");
+        System.out.println("- Rice Subsidy: ₱"+ riceSubsidy);
+        System.out.println("- Phone Allowance: ₱"+ phoneAllowance);
+        System.out.println("- Clothing Allowance: ₱" + clothingAllowance);
+        System.out.println("-----------------------------");
+        System.out.println("Deductions");
+        System.out.println("- SSS: ₱" + sssNumber);
+        System.out.println("- PhilHealth: ₱" + philhealthNumber);
+        System.out.println("- Pag-Ibig: ₱" + pagibigNumber);
+        System.out.println("- Withholding Tax: ₱" + calculateWithholdingTax());
+        System.out.println("- Late: ₱" + calculateLateDeduction());
+        System.out.println("- Absences: ₱" + calculateAbsentDeduction());
+        System.out.println("-----------------------------");
+        System.out.println("Overtime Pay");
+        System.out.println("- Hours: ₱" + overtimeHr);
+        System.out.println("- Rate/Hour: ₱" + hourlyRate);
+        System.out.println("- Total OT Pay: ₱" + (hourlyRate + overtimeHr) );
+        System.out.println("-----------------------------");
+        System.out.println("- Net Pay: ₱" + netPay);
+       
+    }
+    
+    public void tooString() {
+        System.out.println(employeeID + " " + getLastName() + " " + getFirstName()  + " " + position );
     }
 
     // Abstract method implementation

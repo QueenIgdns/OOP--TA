@@ -73,21 +73,22 @@ public class CSVReader {
 
     public List<Employee> readEmployeesFromCSV(String csvFile) {
         String line;
-        String delimiter = ",";  // The delimiter used in the CSV file (comma-separated)
+        String delimiter = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";  // The delimiter used in the CSV file (comma-separated)
         List<Employee> employees = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             br.readLine(); // Skip the header line
 
             while ((line = br.readLine()) != null) {
+                int index = 0;
                 String[] values = line.split(delimiter);
 
                 // Parse double values safely with a helper function
-                double basicSalary = parseDoubleSafe(values[15]);
-                double riceSubsidy = parseDoubleSafe(values[16]);
+                double basicSalary = Double.parseDouble(values[15].replace(",", "").replace("\"", ""));
+                double riceSubsidy = Double.parseDouble(values[16].replace(",", "").replace("\"", ""));
                 double phoneAllowance = parseDoubleSafe(values[17]);
                 double clothingAllowance = parseDoubleSafe(values[18]);
-                double grossSemiMonthlyRate = parseDoubleSafe(values[19]);
+                double grossSemiMonthlyRate = Double.parseDouble(values[19].replace(",", "").replace("\"", ""));
                 double hourlyRate = parseDoubleSafe(values[20]);
 
                 Employee employee = new Employee(
@@ -113,12 +114,19 @@ public class CSVReader {
                         grossSemiMonthlyRate,
                         hourlyRate
                 );
+                
+                System.out.println(grossSemiMonthlyRate);
+                
+                //System.out.println("id "+ values[0] + " "+ values[1]+ " " + values[2] + " "  + values[3]+ " "+ values[4]+ " "+ values[5]+ " "+values[6]+ " "+ values[7]+ " "+ values[8]+ " "+ values[9]+ " "+ values[10]+ " "+ values[11]+ " POSITION "+ values[12]+ " POSITION "+ values[13]+ " "+ values[14]+ " "+ values[15]+ " "+ values[16]+ " "+ values[17]+ " "+ values[18]+ " "+ values[19]+ " "+ values[20]);
                 employees.add(employee);
+//                employee.tooString();
+                index++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
+        
         return employees;
     }
 
@@ -133,49 +141,51 @@ public class CSVReader {
 
     public static void main(String[] args) {
         
-        CSVReader csvReader = new CSVReader();
-        String csvFile = "src/MotorPH_OOP/employees.csv";  // Path to your CSV file
-        
-        List<Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
-        
-        if (employees.isEmpty()) {
-            System.out.println("No employees found. Please check the CSV file.");
-            return;
-        }
-
-        // Prompt for username and password 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter username: ");
-        String inputUsername = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String inputPassword = scanner.nextLine();
-
-        boolean loginSuccessful = false;
-        for (Employee employee : employees) {
-            if (employee.username.equals(inputUsername) && employee.password.equals(inputPassword)) {
-                System.out.println("Login successful! Welcome, " + employee.firstName + " " + employee.lastName);
-                
-                // Calculate salary and overtime
-                double hoursWorked = 160;
-                double overtimeHours = 10;
-                OvertimeComputation overtimeComputation = new OvertimeComputation();
-                double overtimePay = overtimeComputation.calculateOvertime(8, overtimeHours, employee.hourlyRate);
-                double deductions = 5000;
-                double salary = employee.calculateSalaryWithOvertime(hoursWorked, overtimeHours, deductions);
-                
-                // Display the results
-                System.out.println("Total Salary: " + salary);
-                System.out.println("Overtime Pay: " + overtimePay);
-                
-                loginSuccessful = true;
-                break;
-            }
-        }
-
-        if (!loginSuccessful) {
-            System.out.println("Invalid username or password.");
-        }
-
-        scanner.close();
+//        CSVReader csvReader = new CSVReader();
+//        String csvFile = "src/MotorPH_OOP/employees.csv";  // Path to your CSV file
+//        
+//        List<Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
+//        
+//        if (employees.isEmpty()) {
+//            System.out.println("No employees found. Please check the CSV file.");
+//            return;
+//        }
+//        
+//        
+//
+//        // Prompt for username and password 
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Enter username: ");
+//        String inputUsername = scanner.nextLine();
+//        System.out.print("Enter password: ");
+//        String inputPassword = scanner.nextLine();
+//
+//        boolean loginSuccessful = false;
+//        for (Employee employee : employees) {
+//            if (employee.username.equals(inputUsername) && employee.password.equals(inputPassword)) {
+//                System.out.println("Login successful! Welcome, " + employee.firstName + " " + employee.lastName);
+//                
+//                // Calculate salary and overtime
+//                double hoursWorked = 160;
+//                double overtimeHours = 10;
+//                OvertimeComputation overtimeComputation = new OvertimeComputation();
+//                double overtimePay = overtimeComputation.calculateOvertime(8, overtimeHours, employee.hourlyRate);
+//                double deductions = 5000;
+//                double salary = employee.calculateSalaryWithOvertime(hoursWorked, overtimeHours, deductions);
+//                
+//                // Display the results
+//                System.out.println("Total Salary: " + salary);
+//                System.out.println("Overtime Pay: " + overtimePay);
+//                
+//                loginSuccessful = true;
+//                break;
+//            }
+//        }
+//
+//        if (!loginSuccessful) {
+//            System.out.println("Invalid username or password.");
+//        }
+//
+//        scanner.close();
     }
 }

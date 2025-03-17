@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package finaloopta.screens;
+package MotorPH_OOP;
 
 
-
-
+import MotorPH_OOP.CSVReader;
+import MotorPH_OOP.Employee;
+import MotorPH_OOP.OvertimeComputation;
 import java.awt.Color;
+import java.util.List;
+import java.util.Scanner;
 import javax.swing.BorderFactory;
 
 import javax.swing.JFrame;
@@ -18,19 +21,24 @@ import javax.swing.JFrame;
  */
 public class Signin extends javax.swing.JFrame {
 
-    JFrame signin;
+    public static Signin instance;
     
+    // Read employees data from CSV
+        CSVReader csvReader = new CSVReader();
+        String csvFile = "src/MotorPH_OOP/employees.csv";  // Path to CSV file
+
+        List<Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
     /**
      * Creates new form Sign_in
      */
     public Signin() {
+        instance = this;
         initComponents();
-        otherStuff();   
+        otherStuff();
     }
     
     private void otherStuff() {
         usernameTextField.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.BLACK));
-        signin = new JFrame();
     }
 
     /**
@@ -189,7 +197,85 @@ public class Signin extends javax.swing.JFrame {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
+
+        // Check if there are employees loaded
+        if (employees.isEmpty()) {
+            System.out.println("No employees found. Please check the CSV file.");
+            return;
+        }
+        // Instead of scanner, we are to use the textFields
+        // Prompt user for login credentials
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Enter username: ");
+//        String inputUsername = scanner.nextLine();
+//        System.out.print("Enter password: ");
+//        String inputPassword = scanner.nextLine();
+
+
+//        System.out.print("Enter username: ");
+        String inputUsername = usernameTextField.getText();
+//        System.out.print("Enter password: ");
+        String inputPassword = passwordTextField.getText();
         
+        
+        // Check if entered credentials match any employee
+        boolean loginSuccessful = false;
+        for (Employee employee : employees) {
+            
+            if (employee.username.equals(inputUsername) && employee.password.equals(inputPassword)) {
+                System.out.println("Login successful! Welcome, " + employee.firstName + " " + employee.lastName);
+                
+                // If login is successful, calculate salary and overtime
+                double hoursWorked = 160;  // Assuming full-time (40 hours/week for 4 weeks)
+                double overtimeHours = 10;  // 10 hours of overtime
+                
+                // Create an instance of OvertimeComputation
+                OvertimeComputation overtimeComputation = new OvertimeComputation();
+                
+                // Calculate overtime pay
+                double overtimePay = overtimeComputation.calculateOvertime(8, overtimeHours, employee.hourlyRate); // 8 regular hours
+                
+                // Calculate salary (you can adjust deduction as needed)
+                double deductions = 5000;  // Example deductions
+                double salary = employee.calculateSalaryWithOvertime(hoursWorked, overtimeHours, deductions);  // Pass overtimeHours
+                
+                // Display the salary and overtime pay
+                System.out.println("Total Salary: " + salary);
+                System.out.println("Overtime Pay: " + overtimePay);
+                loginSuccessful = true;
+                
+                // To open the dashboard
+                if (employee.position.equals("Chief Executive Officer")) {
+                    System.out.println("You are the admin");
+                    try {
+                    AdminDashboard window = new AdminDashboard(employee);
+                    window.setVisible(true);
+                    Signin.instance.dispose();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                } else {
+                    System.out.println("You are the NOT admin");
+                    // for Non-admin
+                    try {
+                    EmployeeDashboard window = new EmployeeDashboard();
+                    window.setVisible(true);
+                    Signin.instance.dispose();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+                break;
+                
+                
+            }
+        }
+
+        // If login is not successful, system will show an error
+        if (!loginSuccessful) {
+            System.out.println("Invalid username or password.");
+            
+        }
         
     }//GEN-LAST:event_loginBtnActionPerformed
 
@@ -261,9 +347,9 @@ public class Signin extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Signin window = new Signin();
+                    Signin signinWindow = new Signin();
                     
-                    window.signin.setVisible(true);
+                    signinWindow.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

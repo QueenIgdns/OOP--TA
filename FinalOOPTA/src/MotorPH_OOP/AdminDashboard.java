@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package screens;
+package MotorPH_OOP;
 
+import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,31 +13,64 @@ import javax.swing.table.DefaultTableModel;
  * @author sales
  */
 public class AdminDashboard extends javax.swing.JFrame {
+    
+    private Employee currentUser;
+    
+    CSVReader csvReader = new CSVReader();
+    String csvFile = "src/MotorPH_OOP/employees.csv";  // Path to CSV file
+    
+    Boolean isEdit = false;
 
+    List<Employee> employees = csvReader.readEmployeesFromCSV(csvFile);
+    
     /**
      * Creates new form Dashboard
      */
-    public AdminDashboard() {
+    public AdminDashboard(Employee currentUser) {
         initComponents();
         fillTable();
+        disableTF();
         
+        dashboardName.setText(currentUser.getFirstName());
     }
     
     public void fillTable() {
-        String[] columnNames = {"Employee ID", "josepName"};
         
-        String[][] emps = {
-            {"1", "joseph"} };
+        String[][] toDisplay = new String [employees.size()] [2];
         
-        
-        DefaultTableModel model = new DefaultTableModel(emps, columnNames);
+        for (int i = 0; i < employees.size(); i++) {
+            Employee emp = employees.get(i);
+            toDisplay[i][0] = String.valueOf(emp.getEmployeeID()); // Convert ID to String
+            toDisplay[i][1] = emp.getFullName(); // Name as String
+        }
+        String[] columnNames = {"Employee ID", "Name"};       
+        DefaultTableModel model = new DefaultTableModel(toDisplay, columnNames);
         
         home_emp_table.setModel(model);
         
     }
     
+    public void disableTF() {
+        fNameEmpTF.setEnabled(false);
+        lNameEmpTF.setEnabled(false);
+        DOBEmpTF.setEnabled(false);
+        phoneNoEmpTf.setEnabled(false);
+        addressEmpTF.setEnabled(false);
+        sssEmpTF.setEnabled(false);
+        philHEmpTF.setEnabled(false);
+        tinEmpTF.setEnabled(false);
+        pagibigEmpTf.setEnabled(false);
+        statusEmpTF.setEnabled(false);
+        positionEmpTF.setEnabled(false);
+        immedSuppEMpTF.setEnabled(false);
+        basicSalaryEmpTF.setEnabled(false);
+        riceSubsidyEmpTf.setEnabled(false);
+        phoneAllEmpTF.setEnabled(false);
+        clothingAllTF.setEnabled(false);        
+        gsmrTF.setEnabled(false);
+        hourlyrateEmpTf.setEnabled(false);
+    }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,7 +115,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         riceSubsidyEmpTf = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         phoneAllEmpTF = new javax.swing.JTextField();
-        hourlyrateTf = new javax.swing.JTextField();
+        hourlyrateEmpTf = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         gsmrTF = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -101,15 +135,19 @@ public class AdminDashboard extends javax.swing.JFrame {
         overtimePayTF = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         calculatePayBtn = new javax.swing.JButton();
-        cancelPayBtn = new javax.swing.JButton();
+        SavePayBtn = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         basicSalPayTF = new javax.swing.JTextField();
         absentPayTF = new javax.swing.JTextField();
         latePayTF = new javax.swing.JTextField();
-        overtimePayTF1 = new javax.swing.JTextField();
+        withholdingTaxPayTF = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        hoursWorkedPayTF = new javax.swing.JTextField();
+        javax.swing.JLabel hoursWorkedLabel = new javax.swing.JLabel();
         payrollSummaryPane = new javax.swing.JPanel();
         hourlyRatePSTF = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
@@ -165,7 +203,12 @@ public class AdminDashboard extends javax.swing.JFrame {
         });
 
         EditBtn.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
-        EditBtn.setText("Edit");
+        EditBtn.setText("Toggle Edit");
+        EditBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditBtnActionPerformed(evt);
+            }
+        });
 
         fNameEmpTF.setEditable(false);
         fNameEmpTF.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
@@ -262,8 +305,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         phoneAllEmpTF.setEditable(false);
         phoneAllEmpTF.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
 
-        hourlyrateTf.setEditable(false);
-        hourlyrateTf.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        hourlyrateEmpTf.setEditable(false);
+        hourlyrateEmpTf.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
 
         jLabel18.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
         jLabel18.setText("Hourly Rate");
@@ -341,7 +384,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                             .addComponent(jLabel20)
                             .addComponent(gsmrTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel19)
-                            .addComponent(hourlyrateTf, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(hourlyrateEmpTf, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel18)
                             .addComponent(basicSalaryEmpTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(adminEmpPanelLayout.createSequentialGroup()
@@ -408,7 +451,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(hourlyrateTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(hourlyrateEmpTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(adminEmpPanelLayout.createSequentialGroup()
                         .addGroup(adminEmpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminEmpPanelLayout.createSequentialGroup()
@@ -482,9 +525,9 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        cancelPayBtn.setText("Cancel");
+        SavePayBtn.setText("Save Calculation");
 
-        jLabel27.setText("Overtime");
+        jLabel27.setText("Overtime (In Hours)");
 
         jLabel28.setText("Late");
 
@@ -494,6 +537,12 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jLabel39.setText("Withholding Tax");
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        hoursWorkedLabel.setText("Hours Worked");
+
         javax.swing.GroupLayout adminPayrolPanelLayout = new javax.swing.GroupLayout(adminPayrolPanel);
         adminPayrolPanel.setLayout(adminPayrolPanelLayout);
         adminPayrolPanelLayout.setHorizontalGroup(
@@ -501,8 +550,6 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(adminPayrolPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(gsmrPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel22)
                     .addComponent(hourlyratePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21)
                     .addGroup(adminPayrolPanelLayout.createSequentialGroup()
@@ -513,76 +560,92 @@ public class AdminDashboard extends javax.swing.JFrame {
                             .addComponent(jLabel25)
                             .addComponent(philHPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pagibigPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(basicSalPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel24))
+                            .addComponent(jLabel24)
+                            .addComponent(basicSalPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
                         .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel29)
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel28)
-                            .addComponent(overtimePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(absentPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(latePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel39)
-                            .addComponent(overtimePayTF1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel28)
+                            .addComponent(overtimePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(withholdingTaxPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(adminPayrolPanelLayout.createSequentialGroup()
                         .addComponent(calculatePayBtn)
                         .addGap(20, 20, 20)
-                        .addComponent(cancelPayBtn)))
-                .addContainerGap(295, Short.MAX_VALUE))
+                        .addComponent(SavePayBtn))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminPayrolPanelLayout.createSequentialGroup()
+                        .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gsmrPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22))
+                        .addGap(40, 40, 40)
+                        .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(hoursWorkedLabel)
+                            .addComponent(hoursWorkedPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addContainerGap())
         );
         adminPayrolPanelLayout.setVerticalGroup(
             adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(adminPayrolPanelLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(adminPayrolPanelLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, adminPayrolPanelLayout.createSequentialGroup()
                         .addComponent(jLabel26)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(basicSalPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(adminPayrolPanelLayout.createSequentialGroup()
+                        .addComponent(basicSalPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(adminPayrolPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel25)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sssPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(philHPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel23)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pagibigPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(adminPayrolPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel27)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(overtimePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(latePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel29)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(absentPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gsmrPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(hourlyratePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(calculatePayBtn)
+                            .addComponent(SavePayBtn)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, adminPayrolPanelLayout.createSequentialGroup()
                         .addComponent(jLabel39)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(overtimePayTF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(adminPayrolPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sssPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel24)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(philHPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pagibigPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(adminPayrolPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel27)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(overtimePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel28)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(latePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel29)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(absentPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gsmrPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(hourlyratePayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(calculatePayBtn)
-                    .addComponent(cancelPayBtn))
-                .addContainerGap(136, Short.MAX_VALUE))
+                        .addGroup(adminPayrolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(adminPayrolPanelLayout.createSequentialGroup()
+                                .addComponent(withholdingTaxPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(170, 170, 170)
+                                .addComponent(hoursWorkedLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(hoursWorkedPayTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         adminDashboardPane.addTab("Payroll", adminPayrolPanel);
@@ -776,6 +839,11 @@ public class AdminDashboard extends javax.swing.JFrame {
 
             }
         ));
+        home_emp_table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                home_emp_tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(home_emp_table);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -785,13 +853,15 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(dashboardName)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(adminDashboardPane, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dashboardName)
+                        .addGap(0, 818, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(adminDashboardPane, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -822,11 +892,135 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void calculatePayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculatePayBtnActionPerformed
         // TODO add your handling code here:
+        
+        
+        int selectedRow = home_emp_table.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)home_emp_table.getModel();
+        // Get the empID of the selectedRow
+        String selectedUserID = model.getValueAt(selectedRow, 0).toString();
+        
+        
+        
+        for (Employee emp : employees) {
+            if (String.valueOf(selectedUserID) == emp.getEmployeeID()) {
+                double totalDeductions = emp.calculateTotalDeductions();
+                
+                totalDeductions += emp.calculateLateDeduction() + emp.calculateAbsentDeduction();
+                
+                double hoursWorked = Double.valueOf(hoursWorkedPayTF.getText());
+                double overtimeHours = Double.valueOf(overtimePayTF.getText());
+                
+                
+                double netPay = emp.calculateSalaryWithOvertime(hoursWorked, overtimeHours ,totalDeductions);
+                
+                emp.displayPayrollCalculationDetails(overtimeHours, netPay);
+            }
+            
+            
+            
+        }
+        
+        
+        
     }//GEN-LAST:event_calculatePayBtnActionPerformed
 
     private void SavePSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavePSBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SavePSBtnActionPerformed
+
+    private void home_emp_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_home_emp_tableMouseClicked
+        // TODO add your handling code here:
+
+        int selectedRow = home_emp_table.getSelectedRow();
+
+        DefaultTableModel model = (DefaultTableModel)home_emp_table.getModel();
+
+        // Get the empID of the selectedRow
+        String selectedUserID = model.getValueAt(selectedRow, 0).toString();
+
+        for (Employee emp : employees) {
+            if (String.valueOf(selectedUserID) == emp.getEmployeeID()) {
+                fNameEmpTF.setText(emp.getFirstName());
+                lNameEmpTF.setText(emp.getLastName());
+                DOBEmpTF.setText(emp.getBithday());
+                phoneNoEmpTf.setText(emp.getPhoneNumber());
+                addressEmpTF.setText(emp.getAddressFromEmp());
+                sssEmpTF.setText(emp.getSSSNumber());
+                philHEmpTF.setText(emp.getphilhealthNumber());
+                tinEmpTF.setText(emp.gettinNumber());
+                pagibigEmpTf.setText(emp.getpagibigNumber());
+                statusEmpTF.setText(emp.getStatus());
+                positionEmpTF.setText(emp.getPosition());
+                immedSuppEMpTF.setText(emp.getImmediateSupervisor());
+                basicSalaryEmpTF.setText(String.valueOf(emp.getBasicSalary()));
+                riceSubsidyEmpTf.setText(String.valueOf(emp.getRiceSubsidy()));
+                phoneAllEmpTF.setText(String.valueOf(emp.getPhoneAllowance()));
+                clothingAllTF.setText(String.valueOf(emp.getClothingAllowance()));
+                gsmrTF.setText(String.valueOf(emp.getGrossSemiMonthly()));
+                hourlyrateEmpTf.setText(String.valueOf(emp.getHourlyRate()));
+
+                basicSalPayTF.setText(String.valueOf(emp.getBasicSalary()));
+                sssPayTF.setText(emp.getSSSNumber());
+                philHPayTF.setText(emp.getphilhealthNumber());
+                pagibigPayTF.setText(emp.getpagibigNumber());
+                gsmrPayTF.setText(String.valueOf(emp.getGrossSemiMonthly()));
+                hourlyratePayTF.setText(String.valueOf(emp.getHourlyRate()));
+                withholdingTaxPayTF.setText(String.valueOf(emp.calculateWithholdingTax()));
+                
+            }
+        }
+    }//GEN-LAST:event_home_emp_tableMouseClicked
+
+    private void EditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditBtnActionPerformed
+        // TODO add your handling code here:
+        
+        
+        
+        if (isEdit) {
+            fNameEmpTF.setEnabled(true);
+            lNameEmpTF.setEnabled(true);
+            DOBEmpTF.setEnabled(true);
+            phoneNoEmpTf.setEnabled(true);
+            addressEmpTF.setEnabled(true);
+            sssEmpTF.setEnabled(true);
+            philHEmpTF.setEnabled(true);
+            tinEmpTF.setEnabled(true);
+            pagibigEmpTf.setEnabled(true);
+            statusEmpTF.setEnabled(true);
+            positionEmpTF.setEnabled(true);
+            immedSuppEMpTF.setEnabled(true);
+            basicSalaryEmpTF.setEnabled(true);
+            riceSubsidyEmpTf.setEnabled(true);
+            phoneAllEmpTF.setEnabled(true);
+            clothingAllTF.setEnabled(true);        
+            gsmrTF.setEnabled(true);
+            hourlyrateEmpTf.setEnabled(true);
+            isEdit = false;
+        } else {
+            fNameEmpTF.setEnabled(false);
+            lNameEmpTF.setEnabled(false);
+            DOBEmpTF.setEnabled(false);
+            phoneNoEmpTf.setEnabled(false);
+            addressEmpTF.setEnabled(false);
+            sssEmpTF.setEnabled(false);
+            philHEmpTF.setEnabled(false);
+            tinEmpTF.setEnabled(false);
+            pagibigEmpTf.setEnabled(false);
+            statusEmpTF.setEnabled(false);
+            positionEmpTF.setEnabled(false);
+            immedSuppEMpTF.setEnabled(false);
+            basicSalaryEmpTF.setEnabled(false);
+            riceSubsidyEmpTf.setEnabled(false);
+            phoneAllEmpTF.setEnabled(false);
+            clothingAllTF.setEnabled(false);        
+            gsmrTF.setEnabled(false);
+            hourlyrateEmpTf.setEnabled(false);
+            isEdit = true;
+        }
+        
+            
+            System.out.println(isEdit);
+    }//GEN-LAST:event_EditBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -861,10 +1055,13 @@ public class AdminDashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminDashboard().setVisible(true);
+                Employee currentUser = new Employee();
+                new AdminDashboard(currentUser).setVisible(true);
             }
         });
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable AttendanceTable;
@@ -875,6 +1072,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton EditPSBtn;
     private javax.swing.JButton SaveBtn;
     private javax.swing.JButton SavePSBtn;
+    private javax.swing.JButton SavePayBtn;
     private javax.swing.JTextField absentPayTF;
     private javax.swing.JTextField absentsPSTF;
     private javax.swing.JTextField addressEmpTF;
@@ -888,7 +1086,6 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField basicSalaryEmpTF;
     private javax.swing.JTextField basicSalaryPSTF;
     private javax.swing.JButton calculatePayBtn;
-    private javax.swing.JButton cancelPayBtn;
     private javax.swing.JTextField clothingAllTF;
     private javax.swing.JLabel dashboardName;
     private javax.swing.JTextField fNameEmpTF;
@@ -897,8 +1094,9 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField gsmrTF;
     private javax.swing.JTable home_emp_table;
     private javax.swing.JTextField hourlyRatePSTF;
+    private javax.swing.JTextField hourlyrateEmpTf;
     private javax.swing.JTextField hourlyratePayTF;
-    private javax.swing.JTextField hourlyrateTf;
+    private javax.swing.JTextField hoursWorkedPayTF;
     private javax.swing.JTextField immedSuppEMpTF;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -941,13 +1139,14 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField lNameEmpTF;
     private javax.swing.JTextField latePSTF;
     private javax.swing.JTextField latePayTF;
     private javax.swing.JTextField overtimePSTF;
     private javax.swing.JTextField overtimePayTF;
-    private javax.swing.JTextField overtimePayTF1;
     private javax.swing.JTextField pagibigEmpTf;
     private javax.swing.JTextField pagibigPSTF;
     private javax.swing.JTextField pagibigPayTF;
@@ -964,5 +1163,6 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField sssPayTF;
     private javax.swing.JTextField statusEmpTF;
     private javax.swing.JTextField tinEmpTF;
+    private javax.swing.JTextField withholdingTaxPayTF;
     // End of variables declaration//GEN-END:variables
 }

@@ -15,6 +15,17 @@ public class FinalOOPTA {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        try {
+            Signin window = new Signin();
+            window.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        
+        
+        
     }
     
 }
