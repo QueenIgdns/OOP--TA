@@ -158,7 +158,8 @@ public final class PayrollProcessing extends javax.swing.JFrame {
     }
 
     public void updatePayrollRecords() throws IOException, CsvValidationException {
-        String csvPayrollFile = "C:\\Users\\sales\\Documents\\GitHub\\QUEENIEVER\\OOP--TA\\FinalOOPTA\\src\\oop_t2_payroll\\PayrollRecords.csv";
+        //String csvPayrollFile = "C:\\Users\\sales\\Documents\\GitHub\\QUEENIEVER\\OOP--TA\\FinalOOPTA\\src\\oop_t2_payroll\\PayrollRecords.csv";
+        String csvPayrollFile = "src/oop_t2_payroll/PayrollRecords.csv";
 
         boolean isEmpty = isPayrollRecordsCsvEmpty(csvPayrollFile);
 
@@ -885,7 +886,7 @@ public final class PayrollProcessing extends javax.swing.JFrame {
 
         try {
 
-            setVisible(false);
+            //setVisible(false);
             PayrollSummary payroll = null;
             try {
                 payroll = new PayrollSummary();

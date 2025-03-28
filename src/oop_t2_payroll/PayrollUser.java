@@ -43,7 +43,9 @@ private final String userEmployeeNumber;
         this.userFirstName = userPayroll[2];
 
         initComponents();
-        String csvPayrollUser = "C:\\Users\\sales\\Documents\\GitHub\\QUEENIEVER\\OOP--TA\\FinalOOPTA\\src\\oop_t2_payroll\\PayrollRecords.csv";
+//        String csvPayrollUser = "C:\\Users\\sales\\Documents\\GitHub\\QUEENIEVER\\OOP--TA\\FinalOOPTA\\src\\oop_t2_payroll\\PayrollRecords.csv";
+        String csvPayrollUser = "src/oop_t2_payroll/PayrollRecords.csv";
+
         List<String[]> records = FileHandling.readCSV(csvPayrollUser);
         parsePayrollRecords(records);
         populatecomboboxCoveredPeriods();

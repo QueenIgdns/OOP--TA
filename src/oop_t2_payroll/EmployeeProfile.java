@@ -183,6 +183,11 @@ public EmployeeProfile() throws FileNotFoundException, IOException, CsvException
 
         jTextFieldPagibigNum.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray));
         jTextFieldPagibigNum.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        jTextFieldPagibigNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldPagibigNumActionPerformed(evt);
+            }
+        });
         jTextFieldPagibigNum.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldPagibigNumKeyTyped(evt);
@@ -1071,6 +1076,12 @@ public Date convertToDate(Object dateObj) {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jTableEmployeeList.getModel();
         int selectedRowIndex = jTableEmployeeList.getSelectedRow();
+        
+        if (selectedRowIndex == 0) {
+            
+        } else {
+            
+        }
 
         try {
             PayrollProcessing viewEmployeeFrame = null;
@@ -1089,14 +1100,6 @@ public Date convertToDate(Object dateObj) {
             viewEmployeeFrame.jTextFieldLastName.setText(model.getValueAt(selectedRowIndex, 1).toString());
             viewEmployeeFrame.jTextFieldFirstName.setText(model.getValueAt(selectedRowIndex, 2).toString());
             viewEmployeeFrame.jTextFieldBasicSalary.setText(model.getValueAt(selectedRowIndex, 13).toString());
-            // worked hours
-            // hourly rate
-            // gross income
-            // sss deduction
-            // phil health deduction
-            // pagibig deduciton
-            // withoolding tax
-            //
 
             //Benefits
             double riceSubsidy;
@@ -1175,6 +1178,10 @@ public Date convertToDate(Object dateObj) {
             Logger.getLogger(EmployeeProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonExitActionPerformed
+
+    private void jTextFieldPagibigNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPagibigNumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldPagibigNumActionPerformed
 
     /**
      * @param args the command line arguments

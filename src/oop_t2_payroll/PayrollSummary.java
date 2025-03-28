@@ -354,21 +354,21 @@ public static List<EmployeePayroll> employees = new ArrayList<>();
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        try {
-            PayrollProcessing payroll = null;
-            try {
-                payroll = new PayrollProcessing();
-            } catch (FileNotFoundException | CsvException ex) {
-                Logger.getLogger(PayrollSummary.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            // Display the window
-            payroll.setVisible(true);
-            payroll.pack();
-            payroll.setDefaultCloseOperation(PayrollProcessing.DISPOSE_ON_CLOSE); //if viewEmployeeFrame is close, main frame will not close.
-
-        } catch (IOException ex) {
-            Logger.getLogger(EmployeeProfile.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            PayrollProcessing payroll = null;
+//            try {
+//                payroll = new PayrollProcessing();
+//            } catch (FileNotFoundException | CsvException ex) {
+//                Logger.getLogger(PayrollSummary.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            // Display the window
+//            payroll.setVisible(true);
+//            payroll.pack();
+//            payroll.setDefaultCloseOperation(PayrollProcessing.DISPOSE_ON_CLOSE); //if viewEmployeeFrame is close, main frame will not close.
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(EmployeeProfile.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
       /**
