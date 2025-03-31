@@ -1107,12 +1107,12 @@ public Date convertToDate(Object dateObj) {
             double clothingAllowance;
             double totalBenefits;
 
-            riceSubsidy = Double.parseDouble(model.getValueAt(selectedRowIndex, 14).toString());
-            phoneAllowance = Double.parseDouble(model.getValueAt(selectedRowIndex, 15).toString());
-            clothingAllowance = Double.parseDouble(model.getValueAt(selectedRowIndex, 16).toString());
+            riceSubsidy = Double.parseDouble(model.getValueAt(selectedRowIndex, 14).toString().replace(",", ""));
+            phoneAllowance = Double.parseDouble(model.getValueAt(selectedRowIndex, 15).toString().replace(",", ""));
+            clothingAllowance = Double.parseDouble(model.getValueAt(selectedRowIndex, 16).toString().replace(",", ""));
 
             totalBenefits = riceSubsidy + phoneAllowance + clothingAllowance;
-            String formattedTotalBenefits = String.format("%.2f", totalBenefits);
+            String formattedTotalBenefits = String.format("%.2f", totalBenefits).replace(",", "");
             viewEmployeeFrame.jTextFieldBenefits.setText(formattedTotalBenefits);
 
         } catch (IOException ex) {

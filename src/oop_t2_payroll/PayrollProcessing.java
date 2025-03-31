@@ -45,7 +45,7 @@ public final class PayrollProcessing extends javax.swing.JFrame {
     public PayrollProcessing() throws FileNotFoundException, IOException, CsvException {
 
         initComponents();
-        String csvWorkedHoursFile = "C:\\Users\\sales\\Documents\\GitHub\\OOP_Term2\\src\\oop_t2_payroll\\Employee_Worked_Hours.csv";
+        String csvWorkedHoursFile = "src/oop_t2_payroll/Employee_Worked_Hours.csv";
         List<String[]> records = FileHandling.readCSV(csvWorkedHoursFile);
         parseRecordsHoursWorked(records);
         populatecomboboxCoveredPeriods();
@@ -217,7 +217,7 @@ public final class PayrollProcessing extends javax.swing.JFrame {
             String month = jComboBoxCoveredMonth.getSelectedItem().toString();
             String year = jComboBoxCoveredYear.getSelectedItem().toString();
 
-            String recordsName = "C:\\Users\\sales\\Documents\\GitHub\\QUEENIEVER\\OOP--TA\\FinalOOPTA\\src\\oop_t2_payroll\\PayrollRecords.csv";
+            String recordsName = "src/oop_t2_payroll/PayrollRecords.csv";
             List<String[]> records = FileHandling.readCSV(recordsName);
 
             for (String[] record : records) {
@@ -242,15 +242,15 @@ public final class PayrollProcessing extends javax.swing.JFrame {
         int month = monthEnum.getValue();
         int year = Integer.parseInt(jComboBoxCoveredYear.getSelectedItem().toString());
 
-        double basisSalary = Double.parseDouble(jTextFieldBasicSalary.getText());
+        double basisSalary = Double.parseDouble(jTextFieldBasicSalary.getText().replace(",", ""));
         double totalDaysMonth = getWorkingDays(month, year); //          
         double maxDayHours = 8;//maximum of working hours per day
 
         double hourlyRate = basisSalary / totalDaysMonth / maxDayHours;
-        String formattedHourlyRate = String.format("%.2f", hourlyRate); // Format to 2 decimal places
+        String formattedHourlyRate = String.format("%.2f", hourlyRate).replace(",", ""); // Format to 2 decimal places
         jTextFieldHourlyRate.setText(formattedHourlyRate);
 
-        double workedHours = Double.parseDouble(jTextFieldWorkedHours.getText());
+        double workedHours = Double.parseDouble(jTextFieldWorkedHours.getText().replace(",", ""));
 
         double grossIncome = hourlyRate * workedHours;
         String formattedGrossIncome = String.format("%.2f", grossIncome); // Format to 2 decimal places
